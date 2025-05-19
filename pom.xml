@@ -12,8 +12,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <lang.source>15</lang.source>
-    <lang.target>15</lang.target>
+    <lang.source>17</lang.source>
+    <lang.target>17</lang.target>
   </properties>
 
   <dependencies>
@@ -164,6 +164,24 @@
         <configuration>
           <source>${lang.source}</source>
           <target>${lang.target}</target>
+          <fork>true</fork>
+          <compilerArgs>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+          </compilerArgs>
+          <annotationProcessorPaths>
+            <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.28</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>
