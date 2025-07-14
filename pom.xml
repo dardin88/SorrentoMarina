@@ -108,7 +108,7 @@
       <dependency>
           <groupId>io.github.bonigarcia</groupId>
           <artifactId>webdrivermanager</artifactId>
-          <version>4.2.2</version>
+          <version>6.1.0</version>
       </dependency>
     <!-- Simulare pool di connessioni al database -->
     <dependency>
