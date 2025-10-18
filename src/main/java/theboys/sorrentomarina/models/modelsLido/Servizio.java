@@ -1,13 +1,8 @@
 package theboys.sorrentomarina.models.modelsLido;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 /**
  * @author theboys
  */
-@Getter
-@Setter
 public class Servizio {
   private int id;
   private boolean bar;
@@ -94,5 +89,71 @@ public class Servizio {
     } else {
       return false;
     }
+  }
+
+  // Getter methods
+  public int getId() {
+    return id;
+  }
+
+  public boolean isBar() {
+    return bar;
+  }
+
+  public boolean isRistorante() {
+    return ristorante;
+  }
+
+  public boolean isAnimazione() {
+    return animazione;
+  }
+
+  public boolean isWifi() {
+    return wifi;
+  }
+
+  public boolean isCabina() {
+    return cabina;
+  }
+
+  public boolean isBeach_volley() {
+    return beach_volley;
+  }
+
+  public boolean isCanoa() {
+    return canoa;
+  }
+
+  // Setter methods
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public void setBar(boolean bar) {
+    this.bar = bar;
+  }
+
+  public void setRistorante(boolean ristorante) {
+    this.ristorante = ristorante;
+  }
+
+  public void setAnimazione(boolean animazione) {
+    this.animazione = animazione;
+  }
+
+  public void setWifi(boolean wifi) {
+    this.wifi = wifi;
+  }
+
+  public void setCabina(boolean cabina) {
+    this.cabina = cabina;
+  }
+
+  public void setBeach_volley(boolean beach_volley) {
+    this.beach_volley = beach_volley;
+  }
+
+  public void setCanoa(boolean canoa) {
+    this.canoa = canoa;
   }
 }

@@ -1,15 +1,9 @@
 package theboys.sorrentomarina.models.modelsAnnuncio;
 
-import lombok.Getter;
-import lombok.Setter;
-
-
 /**
  * @author theboys
  */
 
-@Getter
-@Setter
 public class Annuncio {
   private int id;
   private String titolo;
@@ -66,4 +60,46 @@ public class Annuncio {
     return "Annuncio[id=" + this.id + ",titolo=" + this.titolo + ",contenuto=" + this.contenuto + ",foto=" + this.foto + ",id_Lido=" + this.id_lido + "]";
   }
 
+
+
+  // Generated getter and setter methods
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getTitolo() {
+    return titolo;
+  }
+
+  public void setTitolo(String titolo) {
+    this.titolo = titolo;
+  }
+
+  public String getContenuto() {
+    return contenuto;
+  }
+
+  public void setContenuto(String contenuto) {
+    this.contenuto = contenuto;
+  }
+
+  public String getFoto() {
+    return foto;
+  }
+
+  public void setFoto(String foto) {
+    this.foto = foto;
+  }
+
+  public int getId_lido() {
+    return id_lido;
+  }
+
+  public void setId_lido(int id_lido) {
+    this.id_lido = id_lido;
+  }
 }

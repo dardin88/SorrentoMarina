@@ -2,11 +2,6 @@ package theboys.sorrentomarina.models.modelsLido;
 /**
  * @author theboys
  */
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class Lido {
   private int id;
   private String nome;
@@ -64,5 +59,95 @@ public class Lido {
   @Override
   public String toString() {
     return "Lido[id=" + this.id + ", nome=" + this.nome + ", indirizzo=" + this.indirizzo + ", telefono=" + this.telefono + ", email=" + this.email + ", prezzo_singolo=" + this.prezzo_singolo + "]";
+  }
+
+
+  // Generated getter and setter methods
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getIndirizzo() {
+    return indirizzo;
+  }
+
+  public void setIndirizzo(String indirizzo) {
+    this.indirizzo = indirizzo;
+  }
+
+  public String getTelefono() {
+    return telefono;
+  }
+
+  public void setTelefono(String telefono) {
+    this.telefono = telefono;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getLogo() {
+    return logo;
+  }
+
+  public void setLogo(String logo) {
+    this.logo = logo;
+  }
+
+  public float getPrezzo_singolo() {
+    return prezzo_singolo;
+  }
+
+  public void setPrezzo_singolo(float prezzo_singolo) {
+    this.prezzo_singolo = prezzo_singolo;
+  }
+
+  public int getNum_righe() {
+    return num_righe;
+  }
+
+  public void setNum_righe(int num_righe) {
+    this.num_righe = num_righe;
+  }
+
+  public int getNum_colonne() {
+    return num_colonne;
+  }
+
+  public void setNum_colonne(int num_colonne) {
+    this.num_colonne = num_colonne;
+  }
+
+  public int getId_servizi() {
+    return id_servizi;
+  }
+
+  public void setId_servizi(int id_servizi) {
+    this.id_servizi = id_servizi;
+  }
+
+  public int getId_resp_ente() {
+    return id_resp_ente;
+  }
+
+  public void setId_resp_ente(int id_resp_ente) {
+    this.id_resp_ente = id_resp_ente;
   }
 }

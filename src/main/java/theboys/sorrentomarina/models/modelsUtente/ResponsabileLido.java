@@ -1,12 +1,8 @@
 package theboys.sorrentomarina.models.modelsUtente;
 
-import lombok.Getter;
-import lombok.Setter;
 /**
  * @author theboys
  */
-@Getter
-@Setter
 public class ResponsabileLido {
   private int id;
   private String nome;
@@ -64,5 +60,71 @@ public class ResponsabileLido {
   @Override
   public String toString() {
     return "ResponsabileLido[id=" + this.id + ",nome=" + this.nome + ",cognome=" + this.cognome + ",email=" + this.email + ",username=" + this.username + "]";
+  }
+
+
+  // Generated getter and setter methods
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getCognome() {
+    return cognome;
+  }
+
+  public void setCognome(String cognome) {
+    this.cognome = cognome;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword_responsabile_lido() {
+    return password_responsabile_lido;
+  }
+
+  public void setPassword_responsabile_lido(String password_responsabile_lido) {
+    this.password_responsabile_lido = password_responsabile_lido;
+  }
+
+  public int getId_lido() {
+    return id_lido;
+  }
+
+  public void setId_lido(int id_lido) {
+    this.id_lido = id_lido;
+  }
+
+  public int getId_resp_ente() {
+    return id_resp_ente;
+  }
+
+  public void setId_resp_ente(int id_resp_ente) {
+    this.id_resp_ente = id_resp_ente;
   }
 }

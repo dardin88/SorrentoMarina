@@ -1,14 +1,8 @@
 package theboys.sorrentomarina.models.modelsPrenotazione;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 /**
  * @author theboys
  */
-@Getter
-@Setter
-@ToString
 public class Ombrellone {
 
   private int id;
@@ -36,5 +30,39 @@ public class Ombrellone {
     this.num_riga=num_riga;
     this.num_colonna=num_colonna;
     this.id_prenotazione=id_prenotazione;
+  }
+
+
+  // Generated getter and setter methods
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public int getNum_riga() {
+    return num_riga;
+  }
+
+  public void setNum_riga(int num_riga) {
+    this.num_riga = num_riga;
+  }
+
+  public int getNum_colonna() {
+    return num_colonna;
+  }
+
+  public void setNum_colonna(int num_colonna) {
+    this.num_colonna = num_colonna;
+  }
+
+  public int getId_prenotazione() {
+    return id_prenotazione;
+  }
+
+  public void setId_prenotazione(int id_prenotazione) {
+    this.id_prenotazione = id_prenotazione;
   }
 }

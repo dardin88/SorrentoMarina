@@ -1,14 +1,9 @@
 package theboys.sorrentomarina.models.modelsRecensione;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * @author theboys
  */
 
-@Getter
-@Setter
 public class Recensione {
   private int id;
   private int giudizio;
@@ -67,5 +62,47 @@ public class Recensione {
   }
 
 
+
+
+  // Generated getter and setter methods
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public int getGiudizio() {
+    return giudizio;
+  }
+
+  public void setGiudizio(int giudizio) {
+    this.giudizio = giudizio;
+  }
+
+  public String getContenuto() {
+    return contenuto;
+  }
+
+  public void setContenuto(String contenuto) {
+    this.contenuto = contenuto;
+  }
+
+  public int getId_lido() {
+    return id_lido;
+  }
+
+  public void setId_lido(int id_lido) {
+    this.id_lido = id_lido;
+  }
+
+  public int getId_turista() {
+    return id_turista;
+  }
+
+  public void setId_turista(int id_turista) {
+    this.id_turista = id_turista;
+  }
 }
 

@@ -38,11 +38,17 @@
       <version>10.0.0</version>
       <scope>provided</scope>
     </dependency>
-    <!-- JSTL per create migliori interfacce grafiche -->
+    <!-- JSTL for Jakarta EE 10 -->
     <dependency>
-      <groupId>jstl</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+    <!-- Standard Taglib Implementation -->
+    <dependency>
+      <groupId>jakarta.servlet.jsp.jstl</groupId>
+      <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+      <version>3.0.0</version>
     </dependency>
     <!-- per accesso al database -->
     <dependency>
@@ -126,13 +132,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Project Lombok-->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.16</version>
-      <scope>provided</scope>
-    </dependency>
+
     <!-- Apache commons-Email-->
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -161,30 +161,18 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.11.0</version>
         <configuration>
-          <source>${lang.source}</source>
-          <target>${lang.target}</target>
+          <source>21</source>
+          <target>21</target>
           <fork>true</fork>
           <failOnError>false</failOnError>
           <showWarnings>true</showWarnings>
+          <encoding>UTF-8</encoding>
           <compilerArgs>
-            <arg>--add-exports</arg>
-            <arg>jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
-            <arg>--add-exports</arg>
-            <arg>jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
-            <arg>--add-exports</arg>
-            <arg>jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
-            <arg>--add-exports</arg>
-            <arg>jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+            <arg>-parameters</arg>
           </compilerArgs>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-              <version>1.18.28</version>
-            </path>
-          </annotationProcessorPaths>
+
         </configuration>
       </plugin>
       <plugin>

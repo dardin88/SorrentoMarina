@@ -1,15 +1,8 @@
 package theboys.sorrentomarina.models.modelsPrenotazione;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
  * @author theboys
  */
-@Getter
-@Setter
-@ToString
 public class Prenotazione {
   private int id;
   private String data_inizio;
@@ -64,6 +57,72 @@ public class Prenotazione {
     this.costo = costo;
     this.codice = codice;
     this.id_lido = id_lido;
+    this.id_turista = id_turista;
+  }
+
+
+  // Generated getter and setter methods
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getData_inizio() {
+    return data_inizio;
+  }
+
+  public void setData_inizio(String data_inizio) {
+    this.data_inizio = data_inizio;
+  }
+
+  public String getData_fine() {
+    return data_fine;
+  }
+
+  public void setData_fine(String data_fine) {
+    this.data_fine = data_fine;
+  }
+
+  public int getNum_posti() {
+    return num_posti;
+  }
+
+  public void setNum_posti(int num_posti) {
+    this.num_posti = num_posti;
+  }
+
+  public float getCosto() {
+    return costo;
+  }
+
+  public void setCosto(float costo) {
+    this.costo = costo;
+  }
+
+  public String getCodice() {
+    return codice;
+  }
+
+  public void setCodice(String codice) {
+    this.codice = codice;
+  }
+
+  public int getId_lido() {
+    return id_lido;
+  }
+
+  public void setId_lido(int id_lido) {
+    this.id_lido = id_lido;
+  }
+
+  public int getId_turista() {
+    return id_turista;
+  }
+
+  public void setId_turista(int id_turista) {
     this.id_turista = id_turista;
   }
 }

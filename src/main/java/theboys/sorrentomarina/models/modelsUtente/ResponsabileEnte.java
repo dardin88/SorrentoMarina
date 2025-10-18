@@ -1,14 +1,8 @@
 package theboys.sorrentomarina.models.modelsUtente;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 /**
  * @author theboys
  */
-@Getter
-@Setter
-@ToString
 public class ResponsabileEnte {
 
   private String nome, cognome, email, username, password_ente;
@@ -55,5 +49,55 @@ public class ResponsabileEnte {
     this.email = email;
     this.username = username;
     this.password_ente = password;
+  }
+
+
+  // Generated getter and setter methods
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getCognome() {
+    return cognome;
+  }
+
+  public void setCognome(String cognome) {
+    this.cognome = cognome;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword_ente() {
+    return password_ente;
+  }
+
+  public void setPassword_ente(String password_ente) {
+    this.password_ente = password_ente;
   }
 }
