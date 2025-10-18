@@ -129,14 +129,10 @@ docker compose down -v  # Removes all data
 docker compose up -d    # Recreates with fresh sample data
 ```
 
-## Environment Configuration
+## Configuration
 
-You can customize database settings by creating a `.env` file:
-
-```bash
-cp .env.example .env
-# Edit .env file as needed
-```
+Database settings are configured directly in `docker-compose.yml`. 
+To customize, edit the environment variables in that file:
 
 Available environment variables:
 - `DB_HOST` - Database hostname (default: mysql-db)
@@ -241,7 +237,6 @@ environment:
 ├── .dockerignore            # Build context exclusions
 ├── deploy.sh               # Automated deployment script
 ├── health-check.sh         # Database and app health verification
-├── .env.example           # Environment configuration template
 └── mysql-init/
     └── 01-schema.sql       # Database initialization
 ```
