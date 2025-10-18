@@ -8,9 +8,9 @@ services:
       - JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
       - DB_HOST=mysql-db
       - DB_PORT=3306
-      - DB_NAME=sorrentomarina
-      - DB_USER=sorrentouser
-      - DB_PASSWORD=sorrentopass
+      - DB_NAME=sorrentoDb
+      - DB_USER=root
+      - DB_PASSWORD=root
     volumes:
       - tomcat-logs:/usr/local/tomcat/logs
     restart: unless-stopped
@@ -22,10 +22,8 @@ services:
   mysql-db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: sorrentomarina
-      MYSQL_USER: sorrentouser
-      MYSQL_PASSWORD: sorrentopass
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sorrentoDb
     ports:
       - "3306:3306"
     volumes:

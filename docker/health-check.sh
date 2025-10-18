@@ -14,7 +14,7 @@ echo ""
 echo "🗄️ Database connectivity test..."
 
 # Test basic connection
-if docker compose exec -T mysql-db mysql -u sorrentouser -psorrentopass -e "SELECT 1;" >/dev/null 2>&1; then
+if docker compose exec -T mysql-db mysql -u root -proot -e "SELECT 1;" >/dev/null 2>&1; then
     echo "✅ Database connection: OK"
 else
     echo "❌ Database connection: FAILED"
@@ -22,7 +22,7 @@ else
 fi
 
 # Check if database exists and has tables
-TABLE_COUNT=$(docker compose exec -T mysql-db mysql -u sorrentouser -psorrentopass -e "USE sorrentomarina; SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'sorrentomarina';" 2>/dev/null | tail -n1)
+TABLE_COUNT=$(docker compose exec -T mysql-db mysql -u root -proot -e "USE sorrentoDb; SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'sorrentoDb';" 2>/dev/null | tail -n1)
 
 if [ "$TABLE_COUNT" = "9" ]; then
     echo "✅ Database schema: OK ($TABLE_COUNT tables found)"
@@ -33,8 +33,8 @@ fi
 # Check sample data
 echo ""
 echo "📊 Sample data verification:"
-docker compose exec -T mysql-db mysql -u sorrentouser -psorrentopass -e "
-USE sorrentomarina; 
+docker compose exec -T mysql-db mysql -u root -proot -e "
+USE sorrentoDb; 
 SELECT 'Tourists:' as type, COUNT(*) as count FROM TURISTA
 UNION ALL SELECT 'Beaches:', COUNT(*) FROM LIDO  
 UNION ALL SELECT 'Reservations:', COUNT(*) FROM PRENOTAZIONE

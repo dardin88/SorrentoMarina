@@ -16,13 +16,11 @@ The database includes the following tables:
 - **RECENSIONE** - Reviews
 
 ## Default Database Configuration
-- **Database Name:** `sorrentomarina`
-- **Username:** `sorrentouser`
-- **Password:** `sorrentopass`
-- **Root Password:** `rootpassword`
-- **Port:** `3306`
-
-## Initialization Files
+- **Database Name:** `sorrentoDb`
+- **Username:** `root` 
+- **Password:** `root`
+- **Root Password:** `root`
+- **Port:** `3306`## Initialization Files
 - `01-schema.sql` - Creates all tables and inserts sample data
 
 ## Sample Data Included
@@ -49,10 +47,10 @@ To connect to the database directly:
 
 ```bash
 # Using docker exec
-docker compose exec mysql-db mysql -u sorrentouser -p sorrentomarina
+docker compose exec mysql-db mysql -u root -p sorrentoDb
 
 # Using MySQL client from host (if installed)
-mysql -h localhost -P 3306 -u sorrentouser -p sorrentomarina
+mysql -h localhost -P 3306 -u root -p sorrentoDb
 ```
 
 ## Environment Variables
@@ -75,6 +73,6 @@ docker compose up -d    # This recreates with fresh data
 The application connects using these environment variables:
 - `DB_HOST=mysql-db`
 - `DB_PORT=3306`
-- `DB_NAME=sorrentomarina`
-- `DB_USER=sorrentouser`
-- `DB_PASSWORD=sorrentopass`
+- `DB_NAME=sorrentoDb`
+- `DB_USER=root`
+- `DB_PASSWORD=root`

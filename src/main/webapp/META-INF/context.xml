@@ -3,5 +3,5 @@
     <Resource driverClassName="com.mysql.cj.jdbc.Driver" maxIdle="9" 
               maxTotal="18" maxWaitMillis="10000" name="jdbc/SorrentoDB" 
               password="root" type="javax.sql.DataSource"
-              url="jdbc:mysql://localhost:3306/sorrentoDb" username="root" />
+              url="jdbc:mysql://mysql-db:3306/sorrentoDb" username="root" />
 </Context>
