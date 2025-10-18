@@ -27,14 +27,31 @@ if [ $? -eq 0 ]; then
     read -p "🤔 Do you want to start the application now? (y/n): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo "🚀 Starting SorrentoMarina application..."
+        echo "🚀 Starting SorrentoMarina application with MySQL database..."
         # Start with docker compose
-    docker compose up -d
-    
-    echo "✅ Application started!"
-    echo "🌐 Access your application at: http://localhost:8080"
-    echo "📋 To view logs: docker compose logs -f sorrentomarina-app"
-    echo "⏹️  To stop: docker compose down"
+        docker compose up -d
+        
+        # Wait for services to be ready
+        echo "⏳ Waiting for services to start..."
+        sleep 10
+        
+        # Check if services are running
+        if docker compose ps | grep -q "Up"; then
+            echo "✅ Application started successfully!"
+            echo ""
+            echo "🌐 Access your application at: http://localhost:8080"
+            echo "🗄️  Database available at: localhost:3306 (user: sorrentouser, db: sorrentomarina)"
+            echo ""
+            echo "📋 Useful commands:"
+            echo "   View app logs:    docker compose logs -f sorrentomarina-app"
+            echo "   View db logs:     docker compose logs -f mysql-db"
+            echo "   Connect to DB:    docker compose exec mysql-db mysql -u sorrentouser -p sorrentomarina"
+            echo "   Stop services:    docker compose down"
+            echo "   Remove all data:  docker compose down -v"
+        else
+            echo "⚠️  Some services may not have started properly. Check logs:"
+            echo "   docker compose logs"
+        fi
     fi
 else
     echo "❌ Docker build failed"

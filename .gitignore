@@ -192,3 +192,6 @@ mysql-data/
 
 # Docker override files
 docker-compose.override.yml
+
+# Environment files with sensitive data
+.env
