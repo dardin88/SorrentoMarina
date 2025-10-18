@@ -180,3 +180,15 @@ ehthumbs.db
 # Local configuration
 application-local.yml
 application-local.properties
+
+######################
+# Docker Files
+######################
+
+# Docker volumes and data
+.docker/
+docker-data/
+mysql-data/
+
+# Docker override files
+docker-compose.override.yml

@@ -1,0 +1,53 @@
+# Version control
+.git
+.gitignore
+
+# IDE files
+.vscode
+.idea
+*.iml
+*.ipr
+.project
+.classpath
+.settings
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Build files (except the WAR we need)
+target/classes
+target/test-classes
+target/maven-status
+target/generated-sources
+target/generated-test-sources
+target/maven-archiver
+target/surefire-reports
+!target/*.war
+
+# Source code (not needed in Docker image)
+src/
+docs/
+*.md
+README*
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+
+# Environment files
+.env*
+
+# Maven wrapper (optional, but we build outside Docker)
+.mvn/
+mvnw*
+
+# Test files
+*.exec

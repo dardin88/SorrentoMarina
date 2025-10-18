@@ -1,0 +1,38 @@
+services:
+  sorrentomarina-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - CATALINA_OPTS=-Xmx1024m -Xms512m -server
+      - JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+    volumes:
+      - tomcat-logs:/usr/local/tomcat/logs
+    restart: unless-stopped
+    networks:
+      - sorrentomarina-network
+
+  # Optional: MySQL database (uncomment if needed)
+  # mysql-db:
+  #   image: mysql:8.0
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword
+  #     MYSQL_DATABASE: sorrentomarina
+  #     MYSQL_USER: sorrentouser
+  #     MYSQL_PASSWORD: sorrentopass
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
+  #     - ./src/test/resources/backup.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  #   restart: unless-stopped
+  #   networks:
+  #     - sorrentomarina-network
+
+volumes:
+  tomcat-logs:
+  # mysql-data: # Uncomment if using MySQL
+
+networks:
+  sorrentomarina-network:
+    driver: bridge
