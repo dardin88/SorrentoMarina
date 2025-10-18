@@ -1,5 +1,5 @@
-# Use Tomcat 10 with JDK 21 (supports Jakarta EE 10)
-FROM tomcat:10.1-jdk21-temurin-jammy
+# Use Tomcat 10 with JRE 25 (supports Jakarta EE 10)
+FROM tomcat:jre25-temurin-noble
 
 # Remove default webapps
 RUN rm -rf /usr/local/tomcat/webapps/*
