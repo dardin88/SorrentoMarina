@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@tag description="Define layout" pageEncoding="UTF-8"%>
 <%@attribute name="title" required="true" type="java.lang.String"%>
 <%@attribute name="admin" required="true" type="java.lang.Boolean"%>
@@ -36,31 +36,31 @@
         <script src="<c:url value="/assets/js/vendor/modernizr-3.5.0.min.js"/>"></script>
 
         <!-- Jquery, Popper, Bootstrap -->
-        <script src="/assets/js/vendor/jquery-1.12.4.min.js"></script>
-        <script src="/assets/js/popper.min.js"></script>
-        <script src="/assets/js/bootstrap.min.js"></script>
+        <script src="<c:url value="/assets/js/vendor/jquery-1.12.4.min.js"/>"></script>
+        <script src="<c:url value="/assets/js/popper.min.js"/>"></script>
+        <script src="<c:url value="/assets/js/bootstrap.min.js"/>"></script>
         <!-- Jquery Mobile Menu -->
-        <script src="/assets/js/jquery.slicknav.min.js"></script>
+        <script src="<c:url value="/assets/js/jquery.slicknav.min.js"/>"></script>
 
         <!-- Jquery Slick , Owl-Carousel Plugins -->
-        <script src="/assets/js/owl.carousel.min.js"></script>
-        <script src="/assets/js/slick.min.js"></script>
+        <script src="<c:url value="/assets/js/owl.carousel.min.js"/>"></script>
+        <script src="<c:url value="/assets/js/slick.min.js"/>"></script>
         <!-- One Page, Animated-HeadLin -->
-        <script src="/assets/js/wow.min.js"></script>
-        <script src="/assets/js/animated.headline.js"></script>
-        <script src="/assets/js/jquery.magnific-popup.js"></script>
+        <script src="<c:url value="/assets/js/wow.min.js"/>"></script>
+        <script src="<c:url value="/assets/js/animated.headline.js"/>"></script>
+        <script src="<c:url value="/assets/js/jquery.magnific-popup.js"/>"></script>
 
         <!-- Scrollup, nice-select, sticky -->
         <script src="<c:url value="/assets/js/jquery.scrollUp.min.js"/>"></script>
-        <script src="/assets/js/jquery.nice-select.min.js"></script>
-        <script src="/assets/js/jquery.sticky.js"></script>
+        <script src="<c:url value="/assets/js/jquery.nice-select.min.js"/>"></script>
+        <script src="<c:url value="/assets/js/jquery.sticky.js"/>"></script>
 
         <!-- contact js -->
-        <script src="/assets/js/contact.js"></script>
-        <script src="/assets/js/jquery.form.js"></script>
-        <script src="/assets/js/jquery.validate.min.js"></script>
-        <script src="/assets/js/mail-script.js"></script>
-        <script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+        <script src="<c:url value="/assets/js/contact.js"/>"></script>
+        <script src="<c:url value="/assets/js/jquery.form.js"/>"></script>
+        <script src="<c:url value="/assets/js/jquery.validate.min.js"/>"></script>
+        <script src="<c:url value="/assets/js/mail-script.js"/>"></script>
+        <script src="<c:url value="/assets/js/jquery.ajaxchimp.min.js"/>"></script>
 
         <!-- Jquery Plugins, main Jquery -->
         <script src="<c:url value="/assets/js/plugins.js"/>"></script>
@@ -68,13 +68,9 @@
                 <link rel="stylesheet" href="<c:url value="/webjars/startbootstrap-sb-admin-2/4.0.6/css/sb-admin-2.min.css"/>">
                 <link rel="stylesheet" href="<c:url value="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/fontawesome-free/css/all.min.css"/>">
                 <script type="text/javascript" src="<c:url value="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/jquery/jquery.min.js"/>" defer="true"></script>
-                <script type="text/javascript" src="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/bootstrap/js/bootstrap.bundle.min.js" defer="true"></script>
-                <script type="text/javascript" src="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/jquery-easing/jquery.easing.min.js" defer="true"></script>
-                <script type="text/javascript" src="/webjars/startbootstrap-sb-admin-2/4.0.6/js/sb-admin-2.min.js" defer="true"></script>
-                <link rel="stylesheet" href="/webjars/startbootstrap-sb-admin-2/4.0.6/css/sb-admin-2.min.css">
-                <link rel="stylesheet" href="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/fontawesome-free/css/all.min.css">
-                <script type="text/javascript" src="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/jquery/jquery.min.js" defer="true"></script>
-                <script type="text/javascript" src="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/bootstrap/js/bootstrap.bundle.min.js" defer="true"></script>
+                <script type="text/javascript" src="<c:url value="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/bootstrap/js/bootstrap.bundle.min.js"/>" defer="true"></script>
+                <script type="text/javascript" src="<c:url value="/webjars/startbootstrap-sb-admin-2/4.0.6/vendor/jquery-easing/jquery.easing.min.js"/>" defer="true"></script>
+                <script type="text/javascript" src="<c:url value="/webjars/startbootstrap-sb-admin-2/4.0.6/js/sb-admin-2.min.js"/>" defer="true"></script>
         <c:if test="${not empty style}">
             <link rel="stylesheet" href="${style}">
         </c:if>
@@ -84,6 +80,6 @@
     </head>
     <body id="page-top">
         <jsp:doBody/>
-        <script src="/js/index.js"></script>
+        <script src="<c:url value="/js/index.js"/>"></script>
     </body>
 </html>
