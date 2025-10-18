@@ -240,12 +240,10 @@ environment:
 ├── docker-compose.yml        # Multi-container setup  
 ├── .dockerignore            # Build context exclusions
 ├── deploy.sh               # Automated deployment script
+├── health-check.sh         # Database and app health verification
 ├── .env.example           # Environment configuration template
-└── docker/
-    └── mysql/
-        ├── init/
-        │   └── 01-schema.sql  # Database initialization
-        └── README.md          # Database documentation
+└── mysql-init/
+    └── 01-schema.sql       # Database initialization
 ```
 
 ## Support
