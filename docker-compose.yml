@@ -4,40 +4,25 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - CATALINA_OPTS=-Xmx1024m -Xms512m -server
-      - JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom
+      - CATALINA_OPTS=-Xmx1024m -Xms512m
       - DB_HOST=mysql-db
       - DB_PORT=3306
       - DB_NAME=sorrentoDb
       - DB_USER=root
       - DB_PASSWORD=root
-    volumes:
-      - tomcat-logs:/usr/local/tomcat/logs
-    restart: unless-stopped
     depends_on:
       - mysql-db
-    networks:
-      - sorrentomarina-network
 
   mysql-db:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: sorrentoDb
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=sorrentoDb
     ports:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
       - ./mysql-init:/docker-entrypoint-initdb.d:ro
-    restart: unless-stopped
-    networks:
-      - sorrentomarina-network
-    command: --default-authentication-plugin=mysql_native_password
 
 volumes:
-  tomcat-logs:
   mysql-data:
-
-networks:
-  sorrentomarina-network:
-    driver: bridge
