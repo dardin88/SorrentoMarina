@@ -158,6 +158,6 @@ public class ResponsabileEnteTest {
   @Test
   public void toStringTest(){
     String result = responsabileEnte.toString();
-    assertEquals(result, "ResponsabileEnte(nome=Mario, cognome=Rossi, email=m.rossi@unisa.it, username=mrossi, password_ente=rossimario, id=1)");
+    assertEquals("ResponsabileEnte(nome=Mario, cognome=Rossi, email=m.rossi@unisa.it, username=mrossi, password_ente=rossimario, id=1)", result);
   }
 }

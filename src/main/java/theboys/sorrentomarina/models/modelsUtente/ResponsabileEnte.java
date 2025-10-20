@@ -100,4 +100,10 @@ public class ResponsabileEnte {
   public void setPassword_ente(String password_ente) {
     this.password_ente = password_ente;
   }
+
+  @Override
+  public String toString() {
+    return "ResponsabileEnte(nome=" + nome + ", cognome=" + cognome + ", email=" + email + 
+           ", username=" + username + ", password_ente=" + password_ente + ", id=" + id + ")";
+  }
 }

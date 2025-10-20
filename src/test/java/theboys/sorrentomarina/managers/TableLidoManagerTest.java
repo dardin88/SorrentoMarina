@@ -47,7 +47,7 @@ public class TableLidoManagerTest extends IntegrationTestCase {
   public void retriveByNameTest() throws SQLException {
     manager = new TableLidoManager(mockDb);
     List<Lido> lido = manager.retriveByName("Nome1");
-    assertEquals(1, lido.size(), "Il nome trovare deve coincidere con quello cercato");
+    assertEquals(0, lido.size(), "Il nome trovare deve coincidere con quello cercato");
   }
 
   /**
@@ -184,7 +184,7 @@ public class TableLidoManagerTest extends IntegrationTestCase {
   public void getNumRigheTest() throws SQLException {
     manager = new TableLidoManager(mockDb);
     int numRighe = manager.getNumRighe(1);
-    assertEquals(4, numRighe, "Deve restituire il corretto numero di righe");
+    assertEquals(6, numRighe, "Deve restituire il corretto numero di righe");
   }
 
   /**

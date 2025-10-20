@@ -125,4 +125,11 @@ public class Prenotazione {
   public void setId_turista(int id_turista) {
     this.id_turista = id_turista;
   }
+
+  @Override
+  public String toString() {
+    return "Prenotazione(id=" + id + ", data_inizio=" + data_inizio + ", data_fine=" + data_fine + 
+           ", num_posti=" + num_posti + ", costo=" + costo + ", codice=" + codice + 
+           ", id_lido=" + id_lido + ", id_turista=" + id_turista + ")";
+  }
 }

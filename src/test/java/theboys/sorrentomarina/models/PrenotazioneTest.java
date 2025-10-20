@@ -196,6 +196,6 @@ public class PrenotazioneTest {
   @Test
   public void toStringTest(){
     String result = prenotazione.toString();
-    assertEquals(result, "Prenotazione(id=1, data_inizio=2020-06-10, data_fine=2020-06-14, num_posti=2, costo=30.0, codice=AB1234, id_lido=1, id_turista=1)");
+    assertEquals("Prenotazione(id=1, data_inizio=2020-06-10, data_fine=2020-06-14, num_posti=2, costo=30.0, codice=AB1234, id_lido=1, id_turista=1)", result);
   }
 }

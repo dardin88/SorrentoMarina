@@ -65,4 +65,9 @@ public class Ombrellone {
   public void setId_prenotazione(int id_prenotazione) {
     this.id_prenotazione = id_prenotazione;
   }
+
+  @Override
+  public String toString() {
+    return "Ombrellone(id=" + id + ", num_riga=" + num_riga + ", num_colonna=" + num_colonna + ", id_prenotazione=" + id_prenotazione + ")";
+  }
 }

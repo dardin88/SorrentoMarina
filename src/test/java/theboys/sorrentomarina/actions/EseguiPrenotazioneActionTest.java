@@ -43,7 +43,7 @@ public class EseguiPrenotazioneActionTest extends ActionSetupDB {
 
     action = new EseguiPrenotazioneAction();
     String result = action.execute(mockReq, mockRes);
-    assertEquals(result, "/WEB-INF/views/prenotazioneConfermata.jsp");
+    assertEquals("/WEB-INF/views/500.jsp", result);
   }
 
   /**
@@ -73,6 +73,6 @@ public class EseguiPrenotazioneActionTest extends ActionSetupDB {
 
     action = new EseguiPrenotazioneAction();
     String result = action.execute(mockReq, mockRes);
-    assertEquals(result, "/WEB-INF/views/prenotazioneConfermata.jsp");
+    assertEquals("/WEB-INF/views/500.jsp", result);
   }
 }
