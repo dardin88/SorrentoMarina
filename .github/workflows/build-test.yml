@@ -48,34 +48,60 @@ jobs:
           --name mariadb-container \
           -e MARIADB_ROOT_PASSWORD=${{ env.DB_PASSWORD }} \
           -e MARIADB_DATABASE=${{ env.DB_NAME }} \
+          -e MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes \
           -p ${{ env.DB_PORT }}:3306 \
           mariadb:10.11
         
-        echo "Waiting for MariaDB to be ready..."
-        for i in {1..30}; do
-          if docker exec mariadb-container mysqladmin ping -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --silent 2>/dev/null; then
-            echo "MariaDB is ready!"
-            break
-          fi
-          echo "⏳ Attempt $i/30: MariaDB starting up..."
-          sleep 3
-        done
+        echo "Starting MariaDB container..."
+        echo "Waiting for MariaDB to initialize..."
         
-        # Verify MariaDB is actually ready
-        if ! docker exec mariadb-container mysqladmin ping -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --silent 2>/dev/null; then
-          echo "MariaDB failed to start"
+        # Wait for container to be running
+        sleep 10
+        
+        # Check if container is running
+        if ! docker ps | grep mariadb-container; then
+          echo "MariaDB container failed to start"
           docker logs mariadb-container
           exit 1
         fi
+        
+        # Wait for MariaDB to be ready for connections
+        for i in {1..60}; do
+          if docker exec mariadb-container mysqladmin ping -h localhost -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --silent 2>/dev/null; then
+            echo "MariaDB is ready and accepting connections!"
+            break
+          fi
+          if [ $i -eq 60 ]; then
+            echo "MariaDB failed to start after 5 minutes"
+            echo "Container logs:"
+            docker logs mariadb-container
+            echo "Container status:"
+            docker ps -a | grep mariadb-container
+            exit 1
+          fi
+          echo "Attempt $i/60: MariaDB initializing..."
+          sleep 5
+        done
+        
+        # Double-check database exists
+        echo "Verifying database '${{ env.DB_NAME }}' exists..."
+        docker exec mariadb-container mysql -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} -e "SHOW DATABASES;" | grep ${{ env.DB_NAME }} || {
+          echo "Database not found, creating..."
+          docker exec mariadb-container mysql -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} -e "CREATE DATABASE IF NOT EXISTS ${{ env.DB_NAME }};"
+        }
 
     - name: Initialize database schema
       run: |
         if [ -f mysql-init/01-schema.sql ]; then
           echo "Initializing database schema..."
-          docker exec -i mariadb-container mysql -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} ${{ env.DB_NAME }} < mysql-init/01-schema.sql
-          echo "Database schema initialized"
+          # Ensure we're connecting to the right database
+          docker exec -i mariadb-container mysql -h localhost -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} ${{ env.DB_NAME }} < mysql-init/01-schema.sql
+          echo "Database schema initialized successfully"
         else
-          echo "Schema file not found, skipping database initialization"
+          echo "Schema file 'mysql-init/01-schema.sql' not found"
+          echo "Available files in mysql-init directory:"
+          ls -la mysql-init/ 2>/dev/null || echo "mysql-init directory does not exist"
+          echo "Continuing without schema initialization..."
         fi
 
     - name: Run tests
