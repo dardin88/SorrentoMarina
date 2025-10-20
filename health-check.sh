@@ -6,6 +6,14 @@
 echo "🔍 SorrentoMarina Database Health Check"
 echo "========================================"
 
+# Start Docker Compose services
+echo "🚀 Starting Docker Compose services..."
+docker compose up -d
+
+# Wait for services to be ready
+echo "⏳ Waiting for services to start..."
+sleep 10
+
 # Check if Docker Compose services are running
 echo "📋 Checking Docker services..."
 docker compose ps --format "table {{.Name}}\t{{.State}}\t{{.Ports}}"
@@ -50,3 +58,7 @@ fi
 
 echo ""
 echo "✨ Health check complete!"
+
+echo ""
+echo "🛑 Stopping Docker Compose services..."
+docker compose down
