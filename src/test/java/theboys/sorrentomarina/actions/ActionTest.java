@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import theboys.sorrentomarina.actions.actionsUtils.Action;
+import theboys.sorrentomarina.actions.actionsUtils.NotFoundAction;
 
 /**
  * @author theboys
@@ -27,7 +28,8 @@ public class ActionTest extends ActionSetup {
    */
   @Test
   public void testView() {
-    Action ac = Mockito.mock(Action.class, Mockito.CALLS_REAL_METHODS);
+    // Use concrete implementation instead of mocking interface
+    Action ac = new NotFoundAction();
     String result = ac.view("testView");
     assertEquals("/WEB-INF/views/testView.jsp", result,
         "It should return the view path");
@@ -38,7 +40,8 @@ public class ActionTest extends ActionSetup {
    */
   @Test
   public void testGetSource() {
-    Action ac = Mockito.mock(Action.class, Mockito.CALLS_REAL_METHODS);
+    // Use concrete implementation instead of mocking interface
+    Action ac = new NotFoundAction();
     ServletContext sc = Mockito.mock(ServletContext.class);
     Mockito.when(sc.getAttribute("db"))
         .thenReturn(Mockito.mock(DataSource.class));
