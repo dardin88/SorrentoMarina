@@ -9,34 +9,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Test with Java 21
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: sorrentoDb
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+    name: Build and Test with Java 21
+    
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: sorrentoDb
+      DB_USER: root
+      DB_PASSWORD: root
 
     steps:
-    - uses: actions/checkout@v5
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Log in to Docker Hub (optional, helps with rate limits)
-      uses: docker/login-action@v3
-      continue-on-error: true
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Checkout code
+      uses: actions/checkout@v5
 
     - name: Set up JDK 21
       uses: actions/setup-java@v4
@@ -51,41 +35,74 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
 
-    - name: Wait for MySQL to be ready
-      run: |
-        until mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot --silent; do
-          sleep 2
-        done
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      continue-on-error: true
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Initialize test database
+    - name: Start MariaDB database
       run: |
-        mysql -h 127.0.0.1 -P 3306 -u root -proot sorrentoDb < mysql-init/01-schema.sql
+        docker run -d \
+          --name mariadb-container \
+          -e MARIADB_ROOT_PASSWORD=${{ env.DB_PASSWORD }} \
+          -e MARIADB_DATABASE=${{ env.DB_NAME }} \
+          -p ${{ env.DB_PORT }}:3306 \
+          mariadb:10.11
+        
+        echo "Waiting for MariaDB to be ready..."
+        for i in {1..30}; do
+          if docker exec mariadb-container mysqladmin ping -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --silent 2>/dev/null; then
+            echo "MariaDB is ready!"
+            break
+          fi
+          echo "⏳ Attempt $i/30: MariaDB starting up..."
+          sleep 3
+        done
+        
+        # Verify MariaDB is actually ready
+        if ! docker exec mariadb-container mysqladmin ping -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} --silent 2>/dev/null; then
+          echo "MariaDB failed to start"
+          docker logs mariadb-container
+          exit 1
+        fi
+
+    - name: Initialize database schema
+      run: |
+        if [ -f mysql-init/01-schema.sql ]; then
+          echo "Initializing database schema..."
+          docker exec -i mariadb-container mysql -u ${{ env.DB_USER }} -p${{ env.DB_PASSWORD }} ${{ env.DB_NAME }} < mysql-init/01-schema.sql
+          echo "Database schema initialized"
+        else
+          echo "Schema file not found, skipping database initialization"
+        fi
 
     - name: Run tests
       run: mvn clean test
-      env:
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_NAME: sorrentoDb
-        DB_USER: root
-        DB_PASSWORD: root
 
     - name: Generate test report
       uses: dorny/test-reporter@v2
       if: success() || failure()
       with:
-        name: Maven Tests
+        name: Maven Test Results
         path: target/surefire-reports/*.xml
         reporter: java-junit
-        fail-on-error: true
+        fail-on-error: false
 
-    - name: Package application
+    - name: Build application
       run: mvn package -DskipTests
 
-    - name: Upload build artifacts
+    - name: Upload WAR artifact
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: sorrentomarina-build-${{ github.sha }}
+        name: sorrentomarina-${{ github.sha }}
         path: target/SorrentoMarina-1.0.war
         retention-days: 30
+
+    - name: Cleanup
+      if: always()
+      run: |
+        docker stop mariadb-container 2>/dev/null || true
+        docker rm mariadb-container 2>/dev/null || true
