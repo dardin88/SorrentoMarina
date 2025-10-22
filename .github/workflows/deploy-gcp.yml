@@ -39,7 +39,7 @@ jobs:
       run: |-
         gcloud --quiet auth configure-docker
         gcloud --quiet auth configure-docker gcr.io
-        gcloud --quiet auth configure-docker us-docker.pkg.dev
+        gcloud --quiet auth configure-docker europe-west1-docker.pkg.dev
 
     - name: Enable required APIs
       run: |-
@@ -86,17 +86,17 @@ jobs:
     - name: Build application
       run: mvn clean package -DskipTests
 
-    - name: Build and push Docker image to GCR
+    - name: Build and push Docker image to Artifact Registry
       run: |-
         docker build -t "$IMAGE:$GITHUB_SHA" .
-        docker tag "$IMAGE:$GITHUB_SHA" "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
-        docker tag "$IMAGE:$GITHUB_SHA" "gcr.io/$PROJECT_ID/$IMAGE:latest"
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:latest"
+        docker tag "$IMAGE:$GITHUB_SHA" "europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA"
+        docker tag "$IMAGE:$GITHUB_SHA" "europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:latest"
+        docker push "europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA"
+        docker push "europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:latest"
 
     - name: Update deployment manifest
       run: |-
-        sed -i "s|your-account/sorrentomarina:latest|gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA|g" k8s/minimal-deployment.yaml
+        sed -i "s|your-account/sorrentomarina:latest|europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA|g" k8s/minimal-deployment.yaml
 
     - name: Deploy to GKE
       run: |-

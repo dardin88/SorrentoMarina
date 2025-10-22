@@ -48,10 +48,10 @@ jobs:
           echo "ℹ️  GKE cluster doesn't exist"
         fi
         
-        # Delete Container Registry images
-        echo "🐳 Cleaning up Container Registry images..."
-        gcloud container images list-tags gcr.io/$PROJECT_ID/$IMAGE --format="get(digest)" --limit=999 | \
-        xargs -I {} gcloud container images delete "gcr.io/$PROJECT_ID/$IMAGE@{}" --force-delete-tags --quiet || true
+        # Delete Artifact Registry images
+        echo "🐳 Cleaning up Artifact Registry images..."
+        gcloud artifacts docker images list europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE --include-tags --limit=999 --format="get(version)" | \
+        xargs -I {} gcloud artifacts docker images delete "europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:{}" --quiet || true
         echo "✅ Container images cleaned up"
         
         echo ""
