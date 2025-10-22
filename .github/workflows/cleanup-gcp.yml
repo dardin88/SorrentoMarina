@@ -1,0 +1,56 @@
+name: Cleanup Google Cloud (GKE)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "DELETE" to confirm cluster deletion'
+        required: true
+        default: ''
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GKE_CLUSTER: sorrento-cluster
+  GKE_ZONE: europe-west3-a
+  IMAGE: sorrentomarina
+
+jobs:
+  cleanup:
+    name: Cleanup GKE Resources
+    runs-on: ubuntu-latest
+    if: github.event.inputs.confirm == 'DELETE'
+    
+    steps:
+    - name: Setup Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Cleanup all GCP resources
+      run: |
+        echo "🗑️ Starting GCP cleanup process..."
+        
+        # Delete Kubernetes namespace first
+        if gcloud container clusters describe $GKE_CLUSTER --zone $GKE_ZONE >/dev/null 2>&1; then
+          echo "📋 Getting cluster credentials and deleting namespace..."
+          gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE
+          kubectl delete namespace sorrentomarina --ignore-not-found=true || true
+          
+          echo "🔥 Deleting GKE cluster..."
+          gcloud container clusters delete $GKE_CLUSTER --zone $GKE_ZONE --quiet
+          echo "✅ GKE cluster deleted"
+        else
+          echo "ℹ️  GKE cluster doesn't exist"
+        fi
+        
+        # Delete Container Registry images
+        echo "🐳 Cleaning up Container Registry images..."
+        gcloud container images list-tags gcr.io/$PROJECT_ID/$IMAGE --format="get(digest)" --limit=999 | \
+        xargs -I {} gcloud container images delete "gcr.io/$PROJECT_ID/$IMAGE@{}" --force-delete-tags --quiet || true
+        echo "✅ Container images cleaned up"
+        
+        echo ""
+        echo "🎉 Cleanup completed successfully!"
+        echo "💰 All GCP resources have been removed to avoid charges"
+        echo "📊 Final status: No GKE cluster or container images remaining"

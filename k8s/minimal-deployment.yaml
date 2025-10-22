@@ -1,0 +1,266 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sorrentomarina
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init
+  namespace: sorrentomarina
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS sorrentoDb;
+    USE sorrentoDb;
+    
+    CREATE TABLE IF NOT EXISTS TURISTA (
+        id INT NOT NULL AUTO_INCREMENT,
+        nome VARCHAR(32) NOT NULL,
+        cognome VARCHAR(32) NOT NULL,
+        email VARCHAR(32) NOT NULL,
+        username VARCHAR(32),
+        password_turista VARCHAR(64),
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS RESPONSABILE_ENTE (
+        id INT NOT NULL AUTO_INCREMENT,
+        nome VARCHAR(32) NOT NULL,
+        cognome VARCHAR(32) NOT NULL,
+        email VARCHAR(32) NOT NULL,
+        username VARCHAR(32),
+        password_ente VARCHAR(64),
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS SERVIZI (
+        id INT NOT NULL AUTO_INCREMENT,
+        bar BOOLEAN NOT NULL,
+        ristorante BOOLEAN NOT NULL,
+        animazione BOOLEAN NOT NULL,
+        wifi BOOLEAN NOT NULL,
+        cabina BOOLEAN NOT NULL,
+        beach_volley BOOLEAN NOT NULL,
+        canoa BOOLEAN NOT NULL,
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS LIDO (
+        id INT NOT NULL AUTO_INCREMENT,
+        nome VARCHAR(32) NOT NULL,
+        indirizzo VARCHAR(32) NOT NULL,
+        telefono VARCHAR(32) NOT NULL,
+        email VARCHAR(32) NOT NULL,
+        logo VARCHAR(64),
+        prezzo_singolo FLOAT NOT NULL,
+        num_righe INT NOT NULL,
+        num_colonne INT NOT NULL,
+        id_servizi INT NOT NULL,
+        id_resp_ente INT,
+        FOREIGN KEY (id_resp_ente) REFERENCES RESPONSABILE_ENTE(id) ON UPDATE CASCADE,
+        FOREIGN KEY (id_servizi) REFERENCES SERVIZI(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS RESPONSABILE_LIDO (
+        id INT NOT NULL AUTO_INCREMENT,
+        nome VARCHAR(32) NOT NULL,
+        cognome VARCHAR(32) NOT NULL,
+        email VARCHAR(32) NOT NULL,
+        username VARCHAR(32) NOT NULL,
+        password_responsabile_lido VARCHAR(64) NOT NULL,
+        id_lido INT NOT NULL,
+        id_resp_ente INT,
+        FOREIGN KEY (id_resp_ente) REFERENCES RESPONSABILE_ENTE(id) ON UPDATE CASCADE,
+        FOREIGN KEY (id_lido) REFERENCES LIDO(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS PRENOTAZIONE (
+        id INT NOT NULL AUTO_INCREMENT,
+        data_inizio DATE NOT NULL,
+        data_fine DATE NOT NULL,
+        num_posti INT NOT NULL,
+        costo FLOAT NOT NULL,
+        codice VARCHAR(32) NOT NULL,
+        id_lido INT NOT NULL,
+        id_turista INT NOT NULL,
+        FOREIGN KEY (id_lido) REFERENCES LIDO(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (id_turista) REFERENCES TURISTA(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS ANNUNCIO (
+        id INT NOT NULL AUTO_INCREMENT,
+        titolo VARCHAR(32) NOT NULL,
+        contenuto VARCHAR(64) NOT NULL,
+        foto VARCHAR(64),
+        id_lido INT NOT NULL,
+        FOREIGN KEY (id_lido) REFERENCES LIDO(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        PRIMARY KEY (id)
+    );
+
+    CREATE TABLE IF NOT EXISTS RECENSIONE (
+        id INT NOT NULL AUTO_INCREMENT,
+        giudizio INT NOT NULL CHECK (giudizio BETWEEN 1 AND 5),
+        contenuto VARCHAR(64),
+        id_lido INT NOT NULL,
+        id_turista INT NOT NULL,
+        PRIMARY KEY (id),
+        FOREIGN KEY (id_lido) REFERENCES LIDO(id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (id_turista) REFERENCES TURISTA(id) ON UPDATE CASCADE ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS OMBRELLONE (
+        id INT NOT NULL AUTO_INCREMENT,
+        num_riga INT NOT NULL,
+        num_colonna INT NOT NULL,
+        id_prenotazione INT NOT NULL,
+        PRIMARY KEY (id),
+        FOREIGN KEY (id_prenotazione) REFERENCES PRENOTAZIONE(id) ON UPDATE CASCADE ON DELETE CASCADE
+    );
+
+    -- Insert sample data
+    INSERT INTO SERVIZI(bar,ristorante,animazione,wifi,cabina,beach_volley,canoa) VALUES 
+    (TRUE,FALSE,TRUE,FALSE,TRUE,FALSE,TRUE),
+    (FALSE,FALSE,TRUE,TRUE,TRUE,FALSE,TRUE),
+    (FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE),
+    (TRUE,FALSE,FALSE,TRUE,FALSE,FALSE,TRUE);
+
+    INSERT INTO RESPONSABILE_ENTE(nome, cognome, email, username, password_ente) VALUES 
+    ('Marco', 'Rossi', 'marco.rossi@sorrentomarina.it', 'admin', '356a192b7913b04c54574d18c28d46e6395428ab'),
+    ('Giulia', 'Bianchi', 'giulia.bianchi@sorrentomarina.it', 'giulia', 'da4b9237bacccdf19c0760cab7aec4a8359010b0'),
+    ('Antonio', 'Verdi', 'antonio.verdi@sorrentomarina.it', 'antonio', '77de68daecd823babbb58edb1c8e14d7106e83bb'),
+    ('Maria', 'Neri', 'maria.neri@sorrentomarina.it', 'maria', '1b6453892473a467d07372d45eb05abc2031647a');
+
+    INSERT INTO LIDO (nome, indirizzo, telefono, email, logo, prezzo_singolo, num_righe, num_colonne, id_servizi, id_resp_ente) VALUES
+    ('Nome1','Indirizzo1','Telefono1','email1','logo1',12.5,4,5,1,1),
+    ('Nome2','Indirizzo2','Telefono2','email2','logo2',12.5,4,5,2,1),
+    ('Nome3','Indirizzo3','Telefono3','email3','logo3',12.5,4,5,3,1),
+    ('Nome4','Indirizzo4','Telefono4','email4','logo4',12.5,4,5,4,1);
+
+    INSERT INTO RESPONSABILE_LIDO(nome, cognome, email, username, password_responsabile_lido, id_lido, id_resp_ente) VALUES 
+    ('Carla', 'Romano', 'carla.romano@chiccodoro.it', 'carla', '356a192b7913b04c54574d18c28d46e6395428ab',1,1),
+    ('Francesco', 'Marino', 'francesco.marino@margherita.it', 'francesco', 'da4b9237bacccdf19c0760cab7aec4a8359010b0',2,1),
+    ('Sofia', 'Costa', 'sofia.costa@nettuno.it', 'sofia', '77de68daecd823babbb58edb1c8e14d7106e83bb',3,1),
+    ('Andrea', 'Sole', 'andrea.sole@solara.it', 'andrea', '1b6453892473a467d07372d45eb05abc2031647a',4,1);
+
+    INSERT INTO TURISTA(nome, cognome, email, username, password_turista) VALUES 
+    ('Luca', 'Ferrari', 'luca.ferrari@email.it', 'luca', '356a192b7913b04c54574d18c28d46e6395428ab'),
+    ('Emma', 'Conti', 'emma.conti@email.it', 'emma', 'da4b9237bacccdf19c0760cab7aec4a8359010b0'),
+    ('Matteo', 'Ricci', 'matteo.ricci@email.it', 'matteo', '77de68daecd823babbb58edb1c8e14d7106e83bb'),
+    ('Sara', 'Gallo', 'sara.gallo@email.it', 'sara', '1b6453892473a467d07372d45eb05abc2031647a');
+
+    INSERT INTO PRENOTAZIONE(data_inizio, data_fine, num_posti, costo, codice, id_lido, id_turista) VALUES
+    ('2020-06-09','2020-06-09',2,30,'AA1234',1,1),
+    ('2020-07-09','2020-07-09',2,30,'BB1234',2,2),
+    ('2020-08-09','2020-08-09',2,30,'CC1234',3,3),
+    ('2020-09-09','2020-09-09',2,30,'DD1234',4,4);
+
+    INSERT INTO ANNUNCIO(titolo, contenuto, foto, id_lido) VALUES
+    ('Riapertura','Grande riapertura ','foto1.jpg',1),
+    ('Sconti','Sconti la prossima settimana','foto2.jpg',1),
+    ('Chiusura','Chiusura per il fine settimana','foto3.jpg',2),
+    ('Riapertura','Riapertura il giorno 10 Maggio','foto4.jpg',3);
+
+    INSERT INTO RECENSIONE(giudizio, contenuto, id_lido, id_turista) VALUES
+    (3,'Struttura sufficiente',1,1),
+    (4,'Struttura molto attrezzata',1,2),
+    (2,'Ristorante deludente',2,1),
+    (5,'Eccezzionale',3,3),
+    (4,'Ottimo paesaggio',4,4);
+
+    INSERT INTO OMBRELLONE(num_riga, num_colonna, id_prenotazione) VALUES 
+    (2,3,1),
+    (1,1,2),
+    (4,7,3),
+    (5,5,4);
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: sorrentomarina
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "sorrentoDb"
+        volumeMounts:
+        - name: mysql-init
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: mysql-init
+        configMap:
+          name: mysql-init
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: sorrentomarina
+spec:
+  selector:
+    app: mysql
+  ports:
+  - port: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sorrentomarina
+  namespace: sorrentomarina
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sorrentomarina
+  template:
+    metadata:
+      labels:
+        app: sorrentomarina
+    spec:
+      containers:
+      - name: app
+        image: your-account/sorrentomarina:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_HOST
+          value: "mysql"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: "sorrentoDb"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "root"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sorrentomarina
+  namespace: sorrentomarina
+spec:
+  selector:
+    app: sorrentomarina
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer

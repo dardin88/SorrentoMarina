@@ -1,0 +1,104 @@
+name: Deploy to Google Cloud (GKE)
+
+on:
+  workflow_run:
+    workflows: ["Docker Build"]
+    types:
+      - completed
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GKE_CLUSTER: sorrento-cluster
+  GKE_ZONE: europe-west3-a
+  DEPLOYMENT_NAME: sorrentomarina
+  IMAGE: sorrentomarina
+
+jobs:
+  deploy:
+    name: Deploy to GKE
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Configure Docker to use gcloud as credential helper
+      run: |-
+        gcloud --quiet auth configure-docker
+
+    - name: Check if GKE cluster exists
+      id: cluster-check
+      run: |
+        if gcloud container clusters describe $GKE_CLUSTER --zone $GKE_ZONE >/dev/null 2>&1; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create GKE cluster if not exists
+      if: steps.cluster-check.outputs.exists == 'false'
+      run: |-
+        gcloud container clusters create "$GKE_CLUSTER" \
+          --zone "$GKE_ZONE" \
+          --num-nodes 1 \
+          --machine-type e2-micro \
+          --disk-size 10GB \
+          --enable-autoscaling \
+          --min-nodes 1 \
+          --max-nodes 2 \
+          --enable-autorepair \
+          --enable-autoupgrade
+
+    - name: Get GKE credentials
+      run: |-
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Build application
+      run: mvn clean package -DskipTests
+
+    - name: Build and push Docker image to GCR
+      run: |-
+        docker build -t "$IMAGE:$GITHUB_SHA" .
+        docker tag "$IMAGE:$GITHUB_SHA" "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        docker tag "$IMAGE:$GITHUB_SHA" "gcr.io/$PROJECT_ID/$IMAGE:latest"
+        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        docker push "gcr.io/$PROJECT_ID/$IMAGE:latest"
+
+    - name: Update deployment manifest
+      run: |-
+        sed -i "s|your-account/sorrentomarina:latest|gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA|g" k8s/minimal-deployment.yaml
+
+    - name: Deploy to GKE
+      run: |-
+        kubectl apply -f k8s/minimal-deployment.yaml
+        kubectl wait --for=condition=available deployment/mysql -n sorrentomarina --timeout=300s
+        kubectl wait --for=condition=available deployment/sorrentomarina -n sorrentomarina --timeout=300s
+
+    - name: Display deployment info
+      run: |
+        echo "🎉 Deployment completed successfully!"
+        echo "📋 Cluster: $GKE_CLUSTER"
+        echo "🌐 Zone: $GKE_ZONE" 
+        echo "🚀 Project: $PROJECT_ID"
+        echo ""
+        echo "📊 Current status:"
+        kubectl get pods -n sorrentomarina
+        kubectl get services -n sorrentomarina
+        echo ""
+        echo "🔗 Get LoadBalancer URL with:"
+        echo "kubectl get service sorrentomarina -n sorrentomarina"
