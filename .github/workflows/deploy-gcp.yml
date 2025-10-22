@@ -14,6 +14,7 @@ env:
   GKE_ZONE: europe-west1-b
   DEPLOYMENT_NAME: sorrentomarina
   IMAGE: sorrentomarina
+  USE_GKE_GCLOUD_AUTH_PLUGIN: True
 
 jobs:
   deploy:
@@ -73,6 +74,13 @@ jobs:
           --max-pods-per-node 110 \
           --verbosity=info
 
+    - name: Install GKE auth plugin
+      run: |-
+        echo "Installing GKE auth plugin..."
+        sudo apt-get update
+        sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin || echo "Plugin may already be available"
+        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
     - name: Get GKE credentials
       run: |-
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
@@ -99,12 +107,16 @@ jobs:
         sed -i "s|your-account/sorrentomarina:latest|europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA|g" k8s/minimal-deployment.yaml
 
     - name: Deploy to GKE
+      env:
+        USE_GKE_GCLOUD_AUTH_PLUGIN: True
       run: |-
         kubectl apply -f k8s/minimal-deployment.yaml
         kubectl wait --for=condition=available deployment/mysql -n sorrentomarina --timeout=300s
         kubectl wait --for=condition=available deployment/sorrentomarina -n sorrentomarina --timeout=300s
 
     - name: Display deployment info
+      env:
+        USE_GKE_GCLOUD_AUTH_PLUGIN: True
       run: |
         echo "🎉 Deployment completed successfully!"
         echo "📋 Cluster: $GKE_CLUSTER"

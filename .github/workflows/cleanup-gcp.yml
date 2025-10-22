@@ -13,6 +13,7 @@ env:
   GKE_CLUSTER: sorrento-cluster
   GKE_ZONE: europe-west1-b
   IMAGE: sorrentomarina
+  USE_GKE_GCLOUD_AUTH_PLUGIN: True
 
 jobs:
   cleanup:
@@ -31,7 +32,16 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
+    - name: Install GKE auth plugin
+      run: |-
+        echo "Installing GKE auth plugin..."
+        sudo apt-get update
+        sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin || echo "Plugin may already be available"
+        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
     - name: Cleanup all GCP resources
+      env:
+        USE_GKE_GCLOUD_AUTH_PLUGIN: True
       run: |
         echo "🗑️ Starting GCP cleanup process..."
         
