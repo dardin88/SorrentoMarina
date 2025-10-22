@@ -11,7 +11,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GKE_CLUSTER: sorrento-cluster
-  GKE_ZONE: europe-west3-a
+  GKE_ZONE: europe-west1-b
   DEPLOYMENT_NAME: sorrentomarina
   IMAGE: sorrentomarina
 
@@ -41,9 +41,9 @@ jobs:
 
     - name: Enable required APIs
       run: |-
-        gcloud services enable container.googleapis.com
-        gcloud services enable containerregistry.googleapis.com
-        gcloud services enable cloudbuild.googleapis.com
+        gcloud services enable container.googleapis.com || echo "APIs might already be enabled or billing not configured"
+        gcloud services enable containerregistry.googleapis.com || echo "Container Registry API enablement skipped"
+        gcloud services enable cloudbuild.googleapis.com || echo "Cloud Build API enablement skipped"
 
     - name: Check if GKE cluster exists
       id: cluster-check
@@ -57,16 +57,18 @@ jobs:
     - name: Create GKE cluster if not exists
       if: steps.cluster-check.outputs.exists == 'false'
       run: |-
+        echo "Creating minimal GKE cluster with e2-micro..."
         gcloud container clusters create "$GKE_CLUSTER" \
           --zone "$GKE_ZONE" \
           --num-nodes 1 \
           --machine-type e2-micro \
-          --disk-size 10GB \
-          --enable-autoscaling \
-          --min-nodes 1 \
-          --max-nodes 2 \
-          --enable-autorepair \
-          --enable-autoupgrade
+          --disk-size 20GB \
+          --disk-type pd-standard \
+          --enable-ip-alias \
+          --network default \
+          --logging=NONE \
+          --max-pods-per-node 110 \
+          --verbosity=info
 
     - name: Get GKE credentials
       run: |-
