@@ -25,15 +25,25 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup Google Cloud CLI
-      uses: google-github-actions/setup-gcloud@v2
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
       with:
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Setup Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Configure Docker to use gcloud as credential helper
       run: |-
         gcloud --quiet auth configure-docker
+
+    - name: Enable required APIs
+      run: |-
+        gcloud services enable container.googleapis.com
+        gcloud services enable containerregistry.googleapis.com
+        gcloud services enable cloudbuild.googleapis.com
 
     - name: Check if GKE cluster exists
       id: cluster-check
