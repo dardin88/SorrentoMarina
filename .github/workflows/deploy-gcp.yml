@@ -1,11 +1,6 @@
 name: Deploy to Google Cloud (GKE)
 
 on:
-  workflow_run:
-    workflows: ["Docker Build"]
-    types:
-      - completed
-    branches: [ main ]
   workflow_dispatch:
 
 env:
@@ -19,7 +14,6 @@ jobs:
   deploy:
     name: Deploy to GKE
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
 
     steps:
     - name: Checkout
