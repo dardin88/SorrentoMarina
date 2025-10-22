@@ -99,33 +99,30 @@ jobs:
 
     - name: Update deployment manifest
       run: |-
-        sed -i "s|your-account/sorrentomarina:latest|europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA|g" k8s/minimal-deployment.yaml
+        sed -i "s|your-account/sorrentomarina:latest|europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA|g" k8s/minimal-deployment-sqlite.yaml
 
     - name: Deploy to GKE
       run: |-
         echo "🧹 Cleaning up existing deployments..."
-        kubectl delete deployment mysql sorrentomarina --ignore-not-found=true -n sorrentomarina || true
+        kubectl delete deployment sorrentomarina --ignore-not-found=true -n sorrentomarina || true
         kubectl delete pods --all --force --grace-period=0 -n sorrentomarina || true
         
         echo "⏳ Waiting for cleanup..."
         sleep 30
         
-        echo "🚀 Deploying to Kubernetes..."
-        kubectl apply -f k8s/minimal-deployment.yaml
+        echo "🚀 Deploying to Kubernetes (SQLite version for e2-micro)..."
+        kubectl apply -f k8s/minimal-deployment-sqlite.yaml
         
         echo "📋 Checking cluster resources..."
         kubectl top nodes || echo "Metrics not available yet"
         kubectl describe nodes
         
-        echo "⏳ Waiting for MySQL deployment (extended timeout for e2-micro)..."
-        kubectl wait --for=condition=available deployment/mysql -n sorrentomarina --timeout=600s
-        
-        echo "📊 MySQL deployment status:"
-        kubectl get pods -n sorrentomarina -l app=mysql
-        kubectl describe pods -n sorrentomarina -l app=mysql
-        
-        echo "⏳ Waiting for application deployment..."
+        echo "⏳ Waiting for application deployment (SQLite version)..."
         kubectl wait --for=condition=available deployment/sorrentomarina -n sorrentomarina --timeout=600s
+        
+        echo "📊 Application deployment status:"
+        kubectl get pods -n sorrentomarina -l app=sorrentomarina
+        kubectl describe pods -n sorrentomarina -l app=sorrentomarina
 
     - name: Display deployment info
       run: |
