@@ -15,10 +15,11 @@
 
 # Indice
 
-- [Introduzione](#Introduzione)
-- [Installazione](#Installazione)
-- [Contributors](#Contributors)
-- [COTS](#Component)
+- [Indice](#indice)
+- [Introduzione](#introduzione)
+- [Installazione](#installazione)
+- [Contributors](#contributors)
+- [Component Off-the-Shelf](#component-off-the-shelf)
     - [Tools](#tools)
     - [Libraries](#libraries)
 
@@ -42,7 +43,7 @@ Piattaforma web per la gestione e prenotazione dei lidi balneari presenti all'in
 
 | Name                                                        | License                                                        |
 | ----------------------------------------------------------- | -------------------------                                      |
-| [MySql](https://www.mysql.com/it/)                          | ![License](https://img.shields.io/aur/license/mysql)           |
+| [SQLite](https://www.sqlite.org/)                          | ![License](https://img.shields.io/badge/license-Public%20Domain-green) |
 | [Maven](https://maven.apache.org/)                          | ![License](https://img.shields.io/aur/license/android-studio)  |
 | [Tomcat](http://tomcat.apache.org/)                         | ![License](https://img.shields.io/aur/license/android-studio)  |
 | [Bootstrap](https://getbootstrap.com/)                      | ![License](https://img.shields.io/apm/l/vim-mode?style=plastic)|

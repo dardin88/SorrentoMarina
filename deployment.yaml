@@ -20,27 +20,19 @@ spec:
     spec:
       containers:
       - name: sorrentomarina
-        image: your-account/sorrentomarina:latest
+        image: europe-west1-docker.pkg.dev/sorrentomarina-edu/sorrentomarina/sorrentomarina:latest
         ports:
         - containerPort: 8080
         env:
         - name: DB_TYPE
-          value: "sqlite"
-        - name: DB_FILE
-          value: "/app/data/sorrentomarina.db"
+          value: sqlite
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: 128Mi
+            cpu: 100m
           limits:
-            memory: "256Mi"
-            cpu: "200m"
-        volumeMounts:
-        - name: sqlite-storage
-          mountPath: /app/data
-      volumes:
-      - name: sqlite-storage
-        emptyDir: {}
+            memory: 256Mi
+            cpu: 200m
 ---
 apiVersion: v1
 kind: Service

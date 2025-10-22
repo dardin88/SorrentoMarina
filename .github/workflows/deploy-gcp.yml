@@ -99,7 +99,7 @@ jobs:
 
     - name: Update deployment manifest
       run: |-
-        sed -i "s|your-account/sorrentomarina:latest|europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA|g" k8s/minimal-deployment-sqlite.yaml
+        sed -i "s|europe-west1-docker.pkg.dev/sorrentomarina-edu/sorrentomarina/sorrentomarina:latest|europe-west1-docker.pkg.dev/$PROJECT_ID/sorrentomarina/$IMAGE:$GITHUB_SHA|g" deployment.yaml
 
     - name: Deploy to GKE
       run: |-
@@ -111,7 +111,7 @@ jobs:
         sleep 30
         
         echo "🚀 Deploying to Kubernetes (SQLite version for e2-micro)..."
-        kubectl apply -f k8s/minimal-deployment-sqlite.yaml
+        kubectl apply -f deployment.yaml
         
         echo "📋 Checking cluster resources..."
         kubectl top nodes || echo "Metrics not available yet"

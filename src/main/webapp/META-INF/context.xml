@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/">
-    <Resource driverClassName="com.mysql.cj.jdbc.Driver" maxIdle="9" 
-              maxTotal="18" maxWaitMillis="10000" name="jdbc/SorrentoDB" 
-              password="root" type="javax.sql.DataSource"
-              url="jdbc:mysql://mysql-service:3306/sorrentoDb" username="root" />
+    <!-- SQLite Configuration for lightweight deployment -->
+    <Environment name="DB_TYPE" value="${DB_TYPE:-mysql}" type="java.lang.String" />
+    <Environment name="SQLITE_DB_PATH" value="${SQLITE_DB_PATH:-/tmp/sorrentodb.sqlite}" type="java.lang.String" />
+    
+    <!-- SQLite Resource -->
+    <Resource name="jdbc/SorrentoDB"
+              type="javax.sql.DataSource"
+              driverClassName="org.sqlite.JDBC"
+              url="jdbc:sqlite:/tmp/sorrentodb.sqlite"
+              maxTotal="20"
+              maxIdle="10"
+              maxWaitMillis="10000" />
 </Context>
