@@ -106,9 +106,19 @@ jobs:
         echo "🚀 Deploying to Kubernetes..."
         kubectl apply -f k8s/minimal-deployment.yaml
         
-        echo "⏳ Waiting for deployments to be ready..."
-        kubectl wait --for=condition=available deployment/mysql -n sorrentomarina --timeout=300s
-        kubectl wait --for=condition=available deployment/sorrentomarina -n sorrentomarina --timeout=300s
+        echo "📋 Checking cluster resources..."
+        kubectl top nodes || echo "Metrics not available yet"
+        kubectl describe nodes
+        
+        echo "⏳ Waiting for MySQL deployment (extended timeout for e2-micro)..."
+        kubectl wait --for=condition=available deployment/mysql -n sorrentomarina --timeout=600s
+        
+        echo "📊 MySQL deployment status:"
+        kubectl get pods -n sorrentomarina -l app=mysql
+        kubectl describe pods -n sorrentomarina -l app=mysql
+        
+        echo "⏳ Waiting for application deployment..."
+        kubectl wait --for=condition=available deployment/sorrentomarina -n sorrentomarina --timeout=600s
 
     - name: Display deployment info
       run: |

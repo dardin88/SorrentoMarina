@@ -193,7 +193,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:8.0
+        image: mysql:5.7
         ports:
         - containerPort: 3306
         env:
@@ -201,6 +201,36 @@ spec:
           value: "root"
         - name: MYSQL_DATABASE
           value: "sorrentoDb"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - mysql
+            - -h
+            - localhost
+            - -uroot
+            - -proot
+            - -e
+            - "SELECT 1"
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
         volumeMounts:
         - name: mysql-init
           mountPath: /docker-entrypoint-initdb.d
@@ -251,6 +281,13 @@ spec:
           value: "root"
         - name: DB_PASSWORD
           value: "root"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
 ---
 apiVersion: v1
 kind: Service
