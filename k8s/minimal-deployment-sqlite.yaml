@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sorrentomarina
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sorrentomarina
+  namespace: sorrentomarina
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sorrentomarina
+  template:
+    metadata:
+      labels:
+        app: sorrentomarina
+    spec:
+      containers:
+      - name: sorrentomarina
+        image: your-account/sorrentomarina:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_TYPE
+          value: "sqlite"
+        - name: DB_FILE
+          value: "/app/data/sorrentomarina.db"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        volumeMounts:
+        - name: sqlite-storage
+          mountPath: /app/data
+      volumes:
+      - name: sqlite-storage
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sorrentomarina
+  namespace: sorrentomarina
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: sorrentomarina

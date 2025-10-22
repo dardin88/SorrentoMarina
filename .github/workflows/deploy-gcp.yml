@@ -103,6 +103,13 @@ jobs:
 
     - name: Deploy to GKE
       run: |-
+        echo "🧹 Cleaning up existing deployments..."
+        kubectl delete deployment mysql sorrentomarina --ignore-not-found=true -n sorrentomarina || true
+        kubectl delete pods --all --force --grace-period=0 -n sorrentomarina || true
+        
+        echo "⏳ Waiting for cleanup..."
+        sleep 30
+        
         echo "🚀 Deploying to Kubernetes..."
         kubectl apply -f k8s/minimal-deployment.yaml
         
