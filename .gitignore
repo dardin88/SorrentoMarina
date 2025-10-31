@@ -139,6 +139,9 @@ logs/
 *.exec
 jacoco.xml
 
+# Keep coverage badges (they will be committed by GitHub Actions)
+!.github/badges/*.svg
+
 # Application specific
 debug.log
 
