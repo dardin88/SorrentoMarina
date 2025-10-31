@@ -62,19 +62,9 @@ jobs:
         reporter: java-junit
         fail-on-error: false
 
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4
-      if: success() || failure()
-      with:
-        file: ./target/site/jacoco/jacoco.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-        verbose: true
-
-    - name: JaCoCo Report
+    - name: JaCoCo Coverage Report
       uses: madrapps/jacoco-report@v1.7.0
-      if: github.event_name == 'pull_request'
+      if: success() || failure()
       with:
         paths: |
           ${{ github.workspace }}/target/site/jacoco/jacoco.xml
