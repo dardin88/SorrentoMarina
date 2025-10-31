@@ -2,18 +2,9 @@
 <img src="src/main/webapp/images/sorrentoMarina.png" width="200" height="200" alt="Logo">
 
 
-[![Build Status](https://travis-ci.com/GPS-IS-The-Boys/SorrentoMarina.svg?branch=main)](https://travis-ci.com/GPS-IS-The-Boys/SorrentoMarina)
-[![codecov](https://codecov.io/gh/GPS-IS-The-Boys/SorrentoMarina/branch/main/graph/badge.svg?token=NUEKV4ERU7)](https://codecov.io/gh/GPS-IS-The-Boys/SorrentoMarina)
-![Coverage](.github/badges/jacoco.svg)
-![Branches](.github/badges/branches.svg)
-</div>
-<div align = "center">
-  <h3>
-    <a href="https://gps-is-the-boys.github.io/SorrentoMarina/">
-      Documentazione modificata da dardin88
-    </a>
-  </h3>
-</div>
+[![CI/CD Pipeline](https://github.com/dardin88/SorrentoMarina/actions/workflows/build-test.yml/badge.svg)](https://github.com/dardin88/SorrentoMarina/actions/workflows/build-test.yml)
+[![Docker Build](https://github.com/dardin88/SorrentoMarina/actions/workflows/docker-build.yml/badge.svg)](https://github.com/dardin88/SorrentoMarina/actions/workflows/docker-build.yml)
+[![codecov](https://codecov.io/gh/dardin88/SorrentoMarina/graph/bundle/<bundle-name>/badge.svg)](https://codecov.io/gh/dardin88/<repo>/graph/bundle/SorrentoMarina/badge.svg)
 
 # Indice
 
@@ -21,9 +12,6 @@
 - [Introduzione](#introduzione)
 - [Installazione](#installazione)
 - [Contributors](#contributors)
-- [Component Off-the-Shelf](#component-off-the-shelf)
-    - [Tools](#tools)
-    - [Libraries](#libraries)
 
 # Introduzione
 
@@ -38,24 +26,3 @@ Piattaforma web per la gestione e prenotazione dei lidi balneari presenti all'in
   src="https://contrib.rocks/image?repo=GPS-IS-The-Boys/SorrentoMarina"
   />
 </a>
-
-# Component Off-the-Shelf
-
-### Tools
-
-| Name                                                        | License                                                        |
-| ----------------------------------------------------------- | -------------------------                                      |
-| [SQLite](https://www.sqlite.org/)                          | ![License](https://img.shields.io/badge/license-Public%20Domain-green) |
-| [Maven](https://maven.apache.org/)                          | ![License](https://img.shields.io/aur/license/android-studio)  |
-| [Tomcat](http://tomcat.apache.org/)                         | ![License](https://img.shields.io/aur/license/android-studio)  |
-| [Bootstrap](https://getbootstrap.com/)                      | ![License](https://img.shields.io/apm/l/vim-mode?style=plastic)|
-
-### Libraries
-
-| Name                                                       | License                                                        |
-| ---------------------------------------------------------- | ----------                                                     |
-| [jQuery](https://jquery.com/)                              | ![License](https://img.shields.io/apm/l/vim-mode?style=plastic)|
-| [Weka](https://www.cs.waikato.ac.nz/ml/weka/)              | ![License](https://img.shields.io/aur/license/weka)            |
-| [JSTL](https://javaee.github.io/jstl-api/)                 | ![License](https://img.shields.io/aur/license/weka)            |
-| [Lombok](https://projectlombok.org/)                       | ![License](https://img.shields.io/apm/l/vim-mode?style=plastic)|
-| [Mockito](https://site.mockito.org/)                       | ![License](https://img.shields.io/apm/l/vim-mode?style=plastic)|
