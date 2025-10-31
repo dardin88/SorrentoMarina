@@ -4,20 +4,9 @@
 
 [![CI/CD Pipeline](https://github.com/dardin88/SorrentoMarina/actions/workflows/build-test.yml/badge.svg)](https://github.com/dardin88/SorrentoMarina/actions/workflows/build-test.yml)
 [![Docker Build](https://github.com/dardin88/SorrentoMarina/actions/workflows/docker-build.yml/badge.svg)](https://github.com/dardin88/SorrentoMarina/actions/workflows/docker-build.yml)
-[![codecov](https://codecov.io/gh/dardin88/SorrentoMarina/graph/bundle/<bundle-name>/badge.svg)](https://codecov.io/gh/dardin88/<repo>/graph/bundle/SorrentoMarina/badge.svg)
-
-# Indice
-
-- [Indice](#indice)
-- [Introduzione](#introduzione)
-- [Installazione](#installazione)
-- [Contributors](#contributors)
-
-# Introduzione
+[![codecov](https://codecov.io/gh/dardin88/SorrentoMarina/graph/bundle/badge.svg)](https://codecov.io/gh/dardin88/SorrentoMarina/graph/bundle/badge.svg)
 
 Piattaforma web per la gestione e prenotazione dei lidi balneari presenti all'interno del consorzio SorrentoMarina.
-
-# Installazione
 
 # Contributors
 
