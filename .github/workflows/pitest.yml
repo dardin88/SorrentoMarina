@@ -1,0 +1,82 @@
+name: PiTest Mutation Testing
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mutation-testing:
+    runs-on: ubuntu-latest
+    name: Run PiTest Mutation Analysis
+    
+    env:
+      DB_TYPE: sqlite
+      SQLITE_DB_PATH: /tmp/sorrentodb.sqlite
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Setup SQLite database
+      run: |
+        echo "Setting up SQLite database..."
+        sudo apt-get update
+        sudo apt-get install -y sqlite3
+        
+        echo "Creating SQLite database with schema..."
+        sqlite3 ${{ env.SQLITE_DB_PATH }} < schema.sql
+        
+        echo "Verifying database setup..."
+        sqlite3 ${{ env.SQLITE_DB_PATH }} "SELECT COUNT(*) FROM LIDO;"
+        echo "SQLite database initialized successfully"
+
+    - name: Run tests first
+      run: mvn clean test
+      continue-on-error: true
+
+    - name: Run PiTest mutation testing
+      run: mvn org.pitest:pitest-maven:mutationCoverage
+      continue-on-error: true
+
+    - name: Upload PiTest HTML report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: pitest-report-${{ github.sha }}
+        path: target/pit-reports/
+        retention-days: 30
+
+    - name: Comment PR with PiTest summary
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const path = 'target/pit-reports/index.html';
+          if (fs.existsSync(path)) {
+            const comment = `## 🧬 PiTest Mutation Testing Report
+            
+            Mutation testing results are available in the artifacts.
+            Download the \`pitest-report-${{ github.sha }}\` artifact to view the detailed HTML report.
+            
+            📊 [View Artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          }
