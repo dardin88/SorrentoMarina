@@ -58,6 +58,17 @@ jobs:
         path: target/pit-reports/
         retention-days: 30
 
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main' && always()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./target/pit-reports
+        destination_dir: mutation-testing
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+        commit_message: 'Update mutation testing report'
+
     - name: Comment PR with PiTest summary
       if: github.event_name == 'pull_request' && always()
       uses: actions/github-script@v6
@@ -68,10 +79,12 @@ jobs:
           if (fs.existsSync(path)) {
             const comment = `## 🧬 PiTest Mutation Testing Report
             
-            Mutation testing results are available in the artifacts.
-            Download the \`pitest-report-${{ github.sha }}\` artifact to view the detailed HTML report.
+            📊 **[View Live Dashboard](https://dardin88.github.io/SorrentoMarina/mutation-testing/)**
             
-            📊 [View Artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            Mutation testing results are also available in the artifacts.
+            Download the \`pitest-report-${{ github.sha }}\` artifact for offline viewing.
+            
+            � [View Artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,

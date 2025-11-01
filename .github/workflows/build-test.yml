@@ -10,6 +10,8 @@ permissions:
   contents: read
   pull-requests: write
   checks: write
+  pages: write
+  id-token: write
 
 jobs:
   test:
@@ -53,6 +55,9 @@ jobs:
     - name: Run tests
       run: mvn clean test
 
+    - name: Generate JaCoCo report
+      run: mvn jacoco:report
+
     - name: Generate test report
       uses: dorny/test-reporter@v2
       if: success() || failure()
@@ -78,6 +83,29 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./target/surefire-reports/TEST-*.xml
+
+    - name: Run PiTest mutation testing
+      run: mvn org.pitest:pitest-maven:mutationCoverage
+      continue-on-error: true
+
+    - name: Prepare reports for GitHub Pages
+      if: github.ref == 'refs/heads/main' && always()
+      run: |
+        mkdir -p github-pages/PiTest
+        mkdir -p github-pages/Jacoco
+        cp -r target/pit-reports/* github-pages/PiTest/
+        cp -r target/site/jacoco/* github-pages/Jacoco/
+
+    - name: Deploy reports to GitHub Pages
+      uses: actions/upload-pages-artifact@v3
+      if: github.ref == 'refs/heads/main' && always()
+      with:
+        path: ./github-pages
+
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v4
+      if: github.ref == 'refs/heads/main' && always()
+      id: deployment
 
     - name: Build application
       run: mvn package -DskipTests
