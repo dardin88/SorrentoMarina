@@ -93,8 +93,12 @@ jobs:
       run: |
         mkdir -p github-pages/PiTest
         mkdir -p github-pages/Jacoco
-        cp -r target/pit-reports/* github-pages/PiTest/
-        cp -r target/site/jacoco/* github-pages/Jacoco/
+        if [ -d "target/pit-reports" ]; then
+          cp -r target/pit-reports/* github-pages/PiTest/ || echo "No PiTest reports found"
+        fi
+        if [ -d "target/site/jacoco" ]; then
+          cp -r target/site/jacoco/* github-pages/Jacoco/ || echo "No JaCoCo reports found"
+        fi
 
     - name: Deploy reports to GitHub Pages
       uses: actions/upload-pages-artifact@v3
